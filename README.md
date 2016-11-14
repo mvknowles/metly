@@ -5,7 +5,7 @@ Metly - A Scalable Metadata Capture and Analysis Tool
 
 Metly is an Open Source tool for collecting "metadata".  Metadata includes many
 things, including internet logs, syslog, telephone logs and email logs.  The
-sky is the limit.
+sky is the limit.  The project is created and designed by Mark Knowles (https://mark/mk).
 
 Metly is designed to scale to a massive size.  That's why it's split up into 3
 components:
