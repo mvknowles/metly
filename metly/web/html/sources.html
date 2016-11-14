@@ -1,0 +1,59 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_new_sr">
+
+  <script>
+
+        $(document).ready(function() {
+            $('#collectors_table').DataTable();
+
+            $(document).on("click", ".delete_source", function() {
+                if (confirm("Delete the selected metadata source?")) {
+                    var row = $(this).parent().parent();
+                    $.get($(this).attr("href"), function(data) {
+                        $(row).remove();
+                    });
+                }
+
+                return false;
+            });
+        });
+
+  </script>
+
+  <h3>Metadata Sources</h3>
+
+  <div>
+    <p>
+      <a href="src/new" class="ajaxlink">Add New MetaData Source</a>
+    </p>
+
+
+  <table id="log_sources_table" class="table table-striped table-bordered"
+      cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Collector</th>
+        <th>Type</th>
+        <th>Parameters</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+ 
+    <tbody>
+      <tr py:for="log_source in log_sources">
+        <td>
+          ${log_source.name}
+        </td>
+        <td>${log_source.collector.name} (${log_source.collector.location})</td>
+        <td>${log_source.log_source_type.short_name}</td>
+        <td>${log_source}</td>
+        <td><a class="delete_source" href="src/delete/${log_source.id}">X</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>

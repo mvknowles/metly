@@ -1,0 +1,26 @@
+#!/bin/bash
+
+UNAME=`uname`
+
+case $UNAME in
+Darwin)
+    mysql.server status > /dev/null
+    if [ $? -eq 3 ]; then
+        echo MySQL not running, starting!
+        mysql.server start
+    else
+        echo MySQL already running
+    fi
+    ;;
+
+Linux)
+    service mysqld status > /dev/null
+    if [ $? -eq 3 ]; then
+        echo MySQL not running, starting!
+        service mysqld start
+    else
+        echo MySQL already running
+    fi
+    ;;
+
+esac

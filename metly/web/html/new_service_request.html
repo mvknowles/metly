@@ -1,0 +1,91 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_new_sr">
+
+  <script>
+
+        $(document).ready(function() {
+
+$('#div_due_date').datepicker({
+    format: "yyyy-mm-dd",
+    startDate: "+Infinity",
+    clearBtn: true,
+    autoclose: true,
+    todayHighlight: true
+});
+
+});
+
+  </script>
+
+  <h3>New Service Request</h3>
+
+  <form class="ajaxform form-horizontal" action="/sr/new" method="POST"
+      name="frm_new_sr" id="frm_new_sr">
+    <div class="form-group">
+      <label for="title" class="col-sm-2 control-label">Title</label>
+      <div class="col-sm-6">
+        <input type="text" name="title" id="title" class="form-control"
+            placeholder="Service request title" />
+        <span py:if="'title' in errors" class="error">* ${errors.title}</span>
+      </div>
+    </div>
+    
+    <!--div class="form-group">
+      <label for="requestor" class="col-sm-2 control-label">
+        Requestor
+      </label>
+      <div class="col-sm-6">
+        <select name="requestor" id="requestor" class="form-control">
+          <option py:for="requestor in requestors" value="${requestor.id}">
+              $requestor.name
+          </option>
+        </select>
+      </div>
+    </div-->
+
+    <div class="form-group">
+      <label for="due_date" class="col-sm-2 control-label">
+        Due date
+      </label>
+      <div class="col-sm-6">
+        <div class="input-group date" id="div_due_date">
+          <input type="text" class="form-control" name="due_date" id="due_date"/>
+          <span class="input-group-addon">
+            <i class="glyphicon glyphicon-th"></i>
+          </span>
+          <span py:if="'due_date' in errors" class="error">* ${errors.due_date}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="external_id" class="col-sm-2 control-label">
+        External Identifier
+      </label>
+      <div class="col-sm-6">
+        <input type="text" name="external_id" id="external_id"
+            class="form-control" placeholder="External Identifier" />
+        <span py:if="'external_id' in errors" class="error">* ${errors.external_id}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description" class="col-sm-2 control-label">
+        Description
+      </label>
+      <div class="col-sm-6">
+        <textarea name="description" id="description" rows="10"
+            class="form-control" placeholder="Description"/>
+        <span py:if="'description' in errors" class="error">* ${errors.description}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-6">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ "a$1" == "a--clean" ]; then
+
+#rm -fr ~/.metly/collector.crt
+#	       ~/.metly/collector.key
+
+    rm -fr ~/.metly/collector_working
+
+    cp data/etc/metly/collector.conf ~/.metly/
+    cp data/etc/metly/collector_sources.conf ~/.metly/
+    mkdir ~/.metly/collector_working/
+fi
+
+./metly/collector/mds_collector --devel

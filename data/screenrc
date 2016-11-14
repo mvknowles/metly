@@ -1,0 +1,20 @@
+# Don't display the copyright page
+startup_message off
+
+chdir /Users/mark/Documents/SCM/metly
+msgminwait 0
+screen -t Execute
+select 0
+chdir metly/${COMP}
+screen -t Edit
+select 1
+msgminwait 1
+altscreen off
+term screen-256color
+#bind ',' prev
+#bind '.' next
+#change the hardstatus settings to give an window list at the bottom of the
+#screen, with the time and date and with the current window highlighted
+hardstatus alwayslastline
+#hardstatus string '%{= kG}%-Lw%{= kW}%50> %n%f* %t%{= kG}%+Lw%< %{= kG}%-=%c:%s%{-}'
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W}%c %{g}]'

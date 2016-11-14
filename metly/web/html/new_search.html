@@ -1,0 +1,129 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_new_search">
+
+  <script>
+
+      $(document).ready(function() {
+
+/*          $(document).on("propertychange change click keyup input paste",
+                  "#expression", function(event) {
+              if (event.target.value.indexOf("select") == 0) {
+                  $("#query_type").val("1");
+              }
+          });
+          */
+
+      });
+  </script>
+
+  <h3>New Search</h3>
+
+  <form class="ajaxform form-horizontal" action="/search/new" method="POST"
+      name="frm_new_search" id="frm_new_search">
+
+    <div class="form-group">
+      <label for="title" class="col-sm-2 control-label">Title</label>
+      <div class="col-sm-6">
+        <input type="text" name="title" id="title" class="form-control"
+            placeholder="Title" />
+        <span py:if="'title' in errors" class="error">
+          * ${errors.title}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="query_type" class="col-sm-2 control-label">Query Type</label>
+      <div class="col-sm-6">
+        <select name="query_type" id="query_type" class="form-control">
+          <option py:for="id, name in query_types" value="${id}"
+              selected="${(search_type == id) or None}">
+            ${name}
+          </option>
+        </select>
+        <span py:if="'query_type' in errors" class="error">
+          * ${errors.query_type}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="expression" class="col-sm-2 control-label">Query Expresion</label>
+      <div class="col-sm-6">
+        <input type="text" name="expression" id="expression" class="form-control"
+            placeholder="Expression" />
+        <span py:if="'expression' in errors" class="error">
+          * ${errors.expression}
+        </span>
+      </div>
+    </div>
+
+    <!--div class="form-group">
+      <label for="collectors" class="col-sm-2 control-label">
+          Collectors
+      </label>
+      <div class="col-sm-6">
+        <select multiple="multiple" id="collectors" name="collectors">
+          <option value="-1" selected="true">Select All</option>
+          <option py:for="collector in collectors" value="${collector.id}" selected="true">
+            ${collector.name}
+          </option>
+        </select>
+        <span py:if="'collectors' in errors" class="error">
+          * ${errors.collectors}
+        </span>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="devices" class="col-sm-2 control-label">
+          Devices
+      </label>
+      <div class="col-sm-6">
+        <select multiple="multiple" id="devices" name="devices">
+          <option value="-1" selected="true">Select All</option>
+          <option py:for="device in devices" value="${device.id}" selected="true">
+            ${device.ip_address} ${device.hostname}
+          </option>
+        </select>
+        <span py:if="'devices' in errors" class="error">
+          * ${errors.devices}
+        </span>
+      </div>
+    </div-->
+
+    <div class="form-group">
+      <label for="external_id" class="col-sm-2 control-label">
+          External ID
+      </label>
+      <div class="col-sm-6">
+        <input type="text" name="external_id" id="external_id"
+            class="form-control" placeholder="External ID or Reference" />
+        <span py:if="'external_id' in errors" class="error">
+          * ${errors.external_id}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description" class="col-sm-2 control-label">
+        Description
+      </label>
+      <div class="col-sm-6">
+        <textarea name="description" id="description" rows="10"
+            class="form-control" placeholder="Description"/>
+        <span py:if="'description' in errors" class="error">
+            * ${errors.description}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-6">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

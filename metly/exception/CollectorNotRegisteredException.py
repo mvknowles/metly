@@ -1,0 +1,2 @@
+class CollectorNotRegisteredException(Exception):
+    pass

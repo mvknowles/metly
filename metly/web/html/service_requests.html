@@ -1,0 +1,52 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_new_sr">
+
+  <script>
+
+        $(document).ready(function() {
+            $('#srs_table').DataTable();
+        });
+
+  </script>
+
+  <h3>Service Requests</h3>
+
+  <div>
+    <p>
+      <a href="sr/new" class="ajaxlink">New Service Request</a>
+    </p>
+
+
+  <table id="srs_table" class="table table-striped table-bordered"
+      cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>SR Number</th>
+        <th>Title</th>
+        <th>Raised</th>
+        <th>Due Date</th>
+        <th>Requestor</th>
+      </tr>
+    </thead>
+ 
+    <tbody>
+      <tr py:for="sr in srs">
+        <td><a href="/sr/edit/${sr.id}" class="ajaxlink">${sr.id}</a></td>
+        <td><a href="/sr/edit/${sr.id}" class="ajaxlink">${sr.title}</a></td>
+        <td><a href="/sr/edit/${sr.id}" class="ajaxlink">
+            ${sr.create_dt}
+        </a></td>
+        <td><a href="/sr/edit/${sr.id}" class="ajaxlink">
+          ${sr.due_date}
+        </a></td>
+        <td><a href="/sr/edit/${sr.id} " class="ajaxlink">
+          ${sr.user.firstname} ${sr.user.lastname}
+        </a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>

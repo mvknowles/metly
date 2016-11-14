@@ -1,0 +1,87 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_new_sr">
+
+  <script>
+
+  </script>
+
+  <h3>New User</h3>
+
+  <form class="ajaxform form-horizontal" action="/user/new" method="POST"
+      name="frm_new_user" id="frm_new_user">
+
+    <div class="form-group">
+      <label for="username" class="col-sm-2 control-label">Username</label>
+      <div class="col-sm-6">
+        <input type="text" name="username" id="username" class="form-control"
+            placeholder="Username" />
+        <span py:if="'username' in errors" class="error">
+          * ${errors.username}
+        </span>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="firstname" class="col-sm-2 control-label">Firstname</label>
+      <div class="col-sm-6">
+        <input type="text" name="firstname" id="firstname" class="form-control"
+            placeholder="Firstname" />
+        <span py:if="'firstname' in errors" class="error">
+          * ${errors.firstname}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="lastname" class="col-sm-2 control-label">Lastname</label>
+      <div class="col-sm-6">
+        <input type="text" name="lastname" id="lastname" class="form-control"
+            placeholder="Lastname" />
+        <span py:if="'lastname' in errors" class="error">
+          * ${errors.lastname}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="col-sm-2 control-label">Email</label>
+      <div class="col-sm-6">
+        <input type="text" name="email" id="email" class="form-control"
+            placeholder="Email" />
+        <span py:if="'email' in errors" class="error">
+          * ${errors.email}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="col-sm-2 control-label">Password</label>
+      <div class="col-sm-6">
+        <input type="text" name="password" id="password" class="form-control"
+            placeholder="Password" />
+        <span py:if="'password' in errors" class="error">
+          * ${errors.password}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="enabled" class="col-sm-2 control-label">Enabled</label>
+      <div class="col-sm-6">
+        <input type="checkbox" name="enabled" id="enabled"
+            class="form-control" />
+        <span py:if="'enabled' in errors" class="error">
+          * ${errors.enabled}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-6">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

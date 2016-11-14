@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      py:strip="">
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+  <py:match path="head" once="true">
+    <head py:attrs="select('@*')">
+      <title py:with="title = list(select('title/text()'))">
+        Metly Portal<py:if test="title"> : ${title}</py:if>
+      </title>
+
+      <link href="/static/metly.css" rel="stylesheet" type="text/css"></link>
+
+      <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+      <script src="/static/jquery/jquery-1.11.2.min.js" charset="utf8"></script>
+      <script src="/static/bootstrap/js/bootstrap.js"></script>
+      <script src="/static/typeahead.bundle.js"></script>
+      <link href="/static/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css"></link>
+      <script src="/static/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+      <script src="/static/DataTables-1.10.7/media/js/jquery.dataTables.min.js" charset="utf8"></script>
+      <link href="/static/DataTables-1.10.7/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"></link>
+      <link href="/static/datatables_theme.css" rel="stylesheet" type="text/css"></link>
+      
+
+      <script>
+
+        $(document).ready(function() {
+            //$(".ajaxlink").bind("click", function(e) {           
+            $(document).on("click", ".ajaxlink", function(e) {
+                var url = $(this).attr("href");
+                $("div#content").load(url);
+                e.preventDefault();
+
+            }); 
+
+
+            $(document).on("submit", ".ajaxform", function(e) {
+                e.preventDefault();
+
+                var url = $(this).attr("action");
+
+                $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: $(this).serialize(),
+                        success: function(data) {
+                            $("div#content").html(data);
+                        }
+                });
+
+            });
+
+        });
+
+
+      </script>
+
+      ${select('*[local-name()!="title"]')} 
+    </head>
+  </py:match>
+
+  <py:match path="body" once="true">
+    <body py:attrs="select('@*')">
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed"
+          data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Metly</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+              role="button" aria-expanded="false">
+              Service
+              <span class="caret"> </span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/sr/new" class="ajaxlink">New Service Request</a></li>
+            <li class="divider"></li>
+            <li><a href="/sr/list" class="ajaxlink">View Service Requests</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+              role="button" aria-expanded="false">
+              Admin
+              <span class="caret"> </span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/src/list" class="ajaxlink">MetaData Sources</a></li>
+            <li><a href="/col/list" class="ajaxlink">Collectors</a></li>
+            <li><a href="/dev/list" class="ajaxlink">Devices</a></li>
+            <!--li py:if="user.su"><a href="/ws/list" class="ajaxlink">
+                Web Servers
+            </a></li-->
+            <li class="divider"></li>
+            <li><a href="/user/list" class="ajaxlink">Users</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+              role="button" aria-expanded="false">
+              Search
+              <span class="caret"> </span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/search/new" class="ajaxlink">New Search Job</a></li>
+            <li class="divider"></li>
+            <li><a href="/search/list" class="ajaxlink">View Search Jobs</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left ajaxform" role="search" method="POST"
+          action="/search/new_quick">
+        <div class="form-group">
+          <input name="expression" id="expression" type="text"
+              class="form-control" placeholder="Quick Search" />
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/auth/logout">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+      <div id="content">
+        ${select('*|text()')}
+      </div>
+      <div id="footer" style="margin:15px">
+        <p class="legalese">&#169; 2014-2015 MetaData Services</p>
+      </div>
+  </body>
+  </py:match>
+
+</html>

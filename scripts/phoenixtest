@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+
+import jaydebeapi
+
+conn = jaydebeapi.connect("org.apache.phoenix.jdbc.PhoenixDriver", ["jdbc:phoenix:localhost"], "/usr/local/phoenix/phoenix-4.4.0-HBase-0.98-client.jar")
+
+cursor = conn.cursor()
+#    CREATE TABLE us_population (  state CHAR(2) NOT NULL,  city VARCHAR NOT NULL,  population BIGINT  CONSTRAINT my_pk PRIMARY KEY (state, city));
+
+cursor.execute("drop table testicle")
+cursor.execute(
+        "create table testicle "
+        "(testicleid integer not null primary key, "
+        "name varchar)")
+cursor.execute("upsert into testicle values (1, 'johnson')")
+cursor.execute("upsert into testicle values (2, 'penis')")
+conn.commit()
+cursor.execute("select * from testicle")
+print cursor.fetchall()

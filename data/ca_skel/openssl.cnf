@@ -1,0 +1,91 @@
+
+dir                     = .
+
+[ ca ]
+
+default_ca              = CA_default
+
+[ CA_default ]
+
+#TODO: check to see if these parameters are secure
+
+certs                   = $dir/certs
+#crl_dir                 = $dir/crl
+database                = $dir/index.txt
+new_certs_dir           = $dir/certs
+certificate             = $dir/certs/ca.crt
+serial                  = $dir/serial.txt
+crlnumber               = $dir/crlnumber.txt
+crl                     = $dir/crl.crl
+private_key             = $dir/private/ca.key
+name_opt                = ca_default
+cert_opt                = ca_default
+default_days            = 9999
+default_crl_days        = 30
+default_md              = sha256
+preserve                = no
+policy                  = policy_match
+x509_extensions         = usr_cert
+
+[ usr_cert ]
+basicConstraints        = CA:FALSE
+nsComment               = "Metly Default CA user certificate"
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer:always
+
+[ server ]
+nsCertType              = server
+extendedKeyUsage        = serverAuth
+basicConstraints        = CA:FALSE
+nsComment               = "Metly Default CA server certificate"
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer:always
+
+[ client ]
+nsCertType              = client
+extendedKeyUsage        = clientAuth
+basicConstraints        = CA:FALSE
+nsComment               = "Metly Default CA client certificate"
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer:always
+
+[ policy_match ]
+countryName             = supplied
+stateOrProvinceName     = supplied
+organizationName        = supplied
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ req ]
+default_bits            = 2048
+default_md              = sha256
+#default_keyfile        = privkey.pem
+distinguished_name      = req_distinguished_name
+attributes              = v3_req
+x509_extensions         = v3_ca
+
+[ req_distinguished_name ]
+countryName             = Country Name (2 letter code)
+countryName_min         = 2
+countryName_max         = 2
+stateOrProvinceName     = State or Province Name (full name)
+localityName            = Locality Name (eg, city)
+0.organizationName      = Organization Name (eg, company)
+organizationalUnitName  = Organizational Unit Name (eg, section)
+commonName              = Common Name (eg, your name or your server\'s hostname)
+commonName_max          = 64
+emailAddress            = Email Address
+emailAddress_max        = 64
+
+[ v3_req ]
+
+basicConstraints        = CA:FALSE
+keyUsage                = nonRepudiation, digitalSignature, keyEncipherment
+
+[ v3_ca ]
+
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always,issuer
+basicConstraints        = CA:true
+

@@ -1,0 +1,126 @@
+Data comes in -> parser (can set fields) -> store in db
+                                         -> store in json format
+                                         -> extend database with new fields
+
+
+1 event needs to be comparable to another CEF, facilitates this.
+
+
+
+3 things we need to consider:
+* Indexability (fast searching)
+* Displayability
+* Comparability
+
+
+Indexability:
+We could have parsers create their own tables or extend the main event table.
+
+Create their own tables.
+Example search:
+
+SELECT source_ip, port from event,firewall,router, where
+firewall.source_hash="adfsdf"
+router.source_hash="adssdf"
+
+The above is disjointed.  We can make it nice for the user by making the event
+table transparent:
+
+SELECT source_ip, port from event where source_hash="adfsf"
+
+expands internally to:
+SELECT source_ip, port from event,firewall where source_hash="adfsf"
+UNION
+SELECT source_ip, port from event,router where source_hash="adfsf"
+
+Will the union work though?
+Yes, as part of the parser config we can select column names.
+
+Hmm, we've got options it seems.
+
+Why do I want to do this?  I wan't to be able to add fields to the schema
+in order to make device type specific queries fast.  I also want it so
+I don't have to pidgeon-hole everything into CEF.
+
+How we can make it work?  It's not the nicest option, user-interface wise,
+but I think we should keep it simple and expose the schema to the user.
+
+The user could do something like this:
+
+SELECT source_ip, source_port, firewall_model from event,firewall
+  where event.id=firewall.id
+
+
+Or we could hide implementation detail, with something like this:
+
+
+pre_sql = SELECT source_ip, source_port, firewall_model
+post_sql = firewall.event_hash = "Asdfasdf"
+%(pre_sql) FROM event,firewall WHERE event.id=firewall.id AND (  %(post_sql) )
+
+This isn't bad.  We get the best of both worlds if we autodetect simple or
+complex querying. 
+
+PROS: All the flexibility in the world, with custom parser tables
+PROS: User can get as complicated as they want
+CONS: Could be very vulnerable to SQL-injection (not a huge risk).
+
+
+
+
+______________________________________________
+SO WHAT HAVE WE DECIDED?!
+----------------------------------------------
+
+We're going to support both simple queries:
+
+SELECT source_ip, source_port, firewall_model FROM event
+
+and complex queries:
+
+SELECT source_ip, source_port, firewall.model FROM event, firewall WHERE
+event.id = firewall.id
+
+* When a parser is defined, it has the ability to make a custom table
+* The field namespace is defined by the table name and an underscore.
+  For example, with a table called firewall, the field will be firewall_field
+  This means we have reserved words that can't be used as table names
+* What to do with CEF?
+
+CEF
+-------
+
+I want to support CEF, but I don't want to make it my database schema, because
+it sucks a fair amount (for example inconsistent capitalization and field
+sizes that are either way too big or too small).
+
+How do we support CEF?
+Good question.  CEF is designed to cover the vast majority of events, so for
+us, we need to define a whole bunch of parsers before we get an internal
+representation that is like cef.
+
+
+
+-----------------------
+GOING BACKWARDS A BIT
+-----------------------
+
+Searchability.  What if we want all events with a particular source address?
+That's when CEF is good.  If we made our schema too abstract, for example
+having firewall.source_address and router.source_address, then we'll end up
+with a very ugly situation.
+
+--------------------------
+FINAL DECISION
+--------------------------
+
+We create a giant CEF-like schema, because it aids searchability and
+commonality.  We also support extension tables for device specific
+stuff.  These are edge cases anyway, but it's good to be able to support them.
+For example, a specific device might need a field indexed.  For example a
+proxy server.  It could place the referer field in it's own table and index
+it.  It's not a great example, but it illustrates the point.
+
+Do we use CEF even though it's ugly?
+YES.  More standards are not needed.  It's the last thing we need and I can
+draw on my current knowledge.

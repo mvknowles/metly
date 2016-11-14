@@ -1,0 +1,42 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_new_sr">
+
+  <script>
+
+        $(document).ready(function() {
+            $('#collectors_table').DataTable();
+        });
+
+  </script>
+
+  <h3>Collectors</h3>
+
+  <div>
+    <p>
+      <a href="col/find" class="ajaxlink">Add New Collector</a>
+    </p>
+
+
+  <table id="collectors_table" class="table table-striped table-bordered"
+      cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>UUID</th>
+      </tr>
+    </thead>
+ 
+    <tbody>
+      <tr py:for="collector in collectors">
+        <td><a href="/col/edit/${collector.id}" class="ajaxlink">${collector.name}</a></td>
+        <td><a href="/col/edit/${collector.id}" class="ajaxlink">${collector.location}</a></td>
+        <td><a href="/col/edit/${collector.id}" class="ajaxlink">${collector.uuid}</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>

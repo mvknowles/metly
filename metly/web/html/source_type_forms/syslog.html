@@ -1,0 +1,25 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/">
+
+  <div class="form-group">
+    <label for="protocol" class="col-sm-2 control-label">Protocol:</label>
+    <div class="col-sm-6">
+      <select id="protocol" name="protocol">
+        <option value="udp">UDP</option>
+		<option value="tcp">TCP</option>
+      </select>
+      <span py:if="'protocol' in errors" class="error">* ${errors.protocol}</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="port" class="col-sm-2 control-label">Port:</label>
+    <div class="col-sm-6">
+      <input type="text" name="port" id="port" class="form-control"
+          placeholder="Port" />
+      <span py:if="'port' in errors" class="error">* ${errors.port}</span>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,26 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/">
+
+  <div class="form-group">
+    <label for="ip_address" class="col-sm-2 control-label">IP Address:</label>
+    <div class="col-sm-6">
+      <input type="text" name="ip_address" id="ip_address"
+          class="form-control" />
+      <span py:if="'ip_address' in errors" class="error">
+          * ${errors.ip_address}
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="fqdn" class="col-sm-2 control-label">FQDN:</label>
+    <div class="col-sm-6">
+      <input type="text" name="fqdn" id="fqdn" class="form-control" />
+      <span py:if="'fqdn' in errors" class="error">* ${errors.fqdn}</span>
+    </div>
+  </div>
+
+
+
+</div>

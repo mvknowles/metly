@@ -1,0 +1,86 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_new_sr">
+
+  <script>
+
+    $(document).ready(function() {
+
+        $(document).on("change", "#log_source_type", function() {
+            var short_name = $("#log_source_type").val();
+            $("#source_type_config").load("src/type_forms/" + short_name);
+        });
+
+        $(document).on("change", "#format", function() {
+            var short_name = $("#format").val();
+            $("#source_format_config").load("src/format_forms/" + short_name);
+        });
+
+    });
+
+  </script>
+
+  <h3>Add New MetaData Source</h3>
+
+  <form class="ajaxform form-horizontal" action="/src/new" method="POST"
+      name="frm_new" id="frm_new">
+
+    <div class="form-group">
+      <label for="location" class="col-sm-2 control-label">
+        Collector:
+      </label>
+      <div class="col-sm-6">
+        <select id="collector_id" name="collector_id">
+          <option py:for="collector in collectors" value="${collector.id}">
+            ${collector.name} ($collector.location)
+          </option>
+        </select>
+        <span py:if="'collector_id' in errors" class="error">
+          * ${errors.collector_id}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="name" class="col-sm-2 control-label">Name:</label>
+      <div class="col-sm-6">
+        <input type="text" name="name" id="name" class="form-control"
+            placeholder="Name" />
+        <span py:if="'name' in errors" class="error">* ${errors.name}</span>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="type" class="col-sm-2 control-label">
+        Type:
+      </label>
+      <div class="col-sm-6">
+        <select id="log_source_type" name="log_source_type">
+          <option py:for="log_source_type in log_source_types"
+              value="${log_source_type.short_name}">
+            ${log_source_type.name}
+          </option>
+        </select>
+        <span py:if="'log_source_type' in errors" class="error">
+          * ${errors.log_source_type}
+        </span>
+      </div>
+    </div>
+
+    <div id="source_type_config">
+      <xi:include py:if="type_form_path" href="${type_form_path}" />
+    </div>
+
+    <div id="source_format_config">
+      <xi:include py:if="format_form_path" href="${format_form_path}" />
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-6">
+        <button type="submit" class="btn btn-default">Add</button>
+      </div>
+    </div>
+  </form>
+</div>

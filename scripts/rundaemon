@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DROP=""
+if [ "a$1" == "a--clean" ]; then
+    rm -fr ~/.metly
+    cp -pr data/etc/metly ~/.metly
+    DROP="-d"
+fi
+
+./metly/daemon/metlyd -c ~/.metly/daemon.conf ${DROP}

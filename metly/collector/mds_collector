@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+from MetlyClient import MetlyClient
+
+metly_client = MetlyClient()
+metly_client.main()

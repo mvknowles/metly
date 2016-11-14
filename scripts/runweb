@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ "a$1" == "a--clean" ]; then
+    rm -f ~/.metly/web.crt
+    rm -f ~/.metly/web.key
+    rm -f ~/.metly/web.conf
+    rm -fr ~/.metly/web_pki
+    cp -pr data/etc/metly/web.conf ~/.metly/
+fi
+
+./metly/web/metlyweb -c ~/.metly/web.conf 

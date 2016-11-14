@@ -1,0 +1,2 @@
+class UploadCorruptedException(Exception):
+    pass

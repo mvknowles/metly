@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:py="http://genshi.edgewall.org/">
+  <xi:include href="layout.html" />
+  <head>
+    <title>Home</title>
+
+      <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+      <script src="/static/jquery/jquery-1.11.2.min.js" charset="utf8"></script>
+      <script src="/static/bootstrap/js/bootstrap.js"></script>
+      <link href="/static/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css"></link>
+      <script src="/static/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+      <script src="/static/DataTables-1.10.7/media/js/jquery.dataTables.min.js" charset="utf8"></script>
+      <link href="/static/DataTables-1.10.7/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"></link>
+      <link href="/static/datatables_theme.css" rel="stylesheet" type="text/css"></link>
+      
+
+
+  <script>
+    $(document).ready(function() {
+
+        var event_stream = new EventSource("/search/test");
+        event_stream.onmessage = function(e) {
+            //var message = JSON.parse(event.data);
+            $("#results").append(e.data);
+        };
+    });
+  </script>
+  </head>
+  <body>
+
+  <h3>Search Results</h3>
+  ${search.title}
+
+  <div id="results"></div>
+
+</body>
+</html>

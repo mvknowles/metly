@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+
+import sys
+import argparse
+import ConfigParser
+sys.path.append(".")
+from db import db
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from metly.util import constants
+from metly.model.Customer import Customer
+from metly.model.Collector import Collector
+from metly.model.WebServer import WebServer
+
+class Args(object):
+    pass
+
+class MetlyCommand(object):
+
+    def main(self):
+        self.args = Args()
+        self.parse_arguments()
+
+        self.config = ConfigParser.RawConfigParser()
+        self.config.read(self.args.config_path)
+        db_uri = self.config.get("database", "uri")
+        self.open_db(db_uri)
+
+        if self.args.web_server_uuid != None:
+            self.authorize_web_server()
+
+        if self.args.collector_uuid != None:
+            self.authorize_collector()
+
+    def open_db(self, db_uri):
+        db.engine = create_engine(db_uri, echo=False)
+        db.Session = sessionmaker(bind=db.engine)
+
+    def authorize_web_server(self):
+
+        uuid = self.args.web_server_uuid
+        session = db.Session()
+        try:
+            web_server = session.query(WebServer)\
+                    .filter(WebServer.uuid==uuid).one()
+            web_server.authorized = True
+            session.commit()
+            print "Successfully authorized web server"
+        finally:
+            session.close()
+
+
+    def authorize_collector(self):
+
+        collector_uuid = self.args.collector_uuid
+        session = db.Session()
+        try:
+            customer = session.query(Customer)\
+                     .filter(Customer.short_name=="test").one()
+
+            collector = session.query(Collector)\
+                    .filter(Collector.uuid==collector_uuid).one()
+            collector.customer_id = customer.id
+            collector.name = "Test collector"
+            collector.location = "Test location"
+
+            session.commit()
+            print "Added collector"
+
+        finally:
+            session.close()
+
+
+    def parse_arguments(self):
+        parser = argparse.ArgumentParser(description= \
+                "Metly Command Line Interface")
+
+        parser.add_argument("-c", "--conf", dest="config_path",
+                required=False, default=constants.DEFAULT_DAEMON_CONFIG_PATH, \
+                help="The configuration file to use")
+
+        parser.add_argument("-aw", "--authorize-web-server", \
+                dest="web_server_uuid", required=False, \
+                help="Web Server UUID")
+
+        parser.add_argument("-ac", "--authorize-collector", \
+                dest="collector_uuid", required=False, \
+                help="Collector UUID")
+
+        parser.parse_args(namespace=self.args)
+
+
+if __name__ == "__main__":
+    MetlyCommand().main()

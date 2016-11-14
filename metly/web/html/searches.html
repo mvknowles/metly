@@ -1,0 +1,52 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_new_search">
+
+  <script>
+
+    $(document).ready(function() {
+        $('#searches_table').DataTable();
+    });
+
+  </script>
+
+  <h3>Searches</h3>
+
+  <div>
+    <p>
+      <a href="/search/new" class="ajaxlink">Create New Search Job</a>
+    </p>
+
+
+  <table id="searches_table" class="table table-striped table-bordered"
+      cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Owner</th>
+        <th>Created</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+ 
+    <tbody>
+      <tr py:for="search in searches">
+        <td><a href="/search/results/${search.id}" class="ajaxlink">
+            ${search.title}
+        </a></td>
+        <td><a href="/search/results/${search.id}" class="ajaxlink">
+            ${search.user.firstname} ${search.user.lastname}
+        </a></td>
+        <td><a href="/search/results/${search.id}" class="ajaxlink">
+            ${search.create_dt}
+        </a></td>
+        <td><a href="/search/results/${search.id}" class="ajaxlink">
+            ${search.status_text}
+        </a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>

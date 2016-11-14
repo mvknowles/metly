@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+import sys
+import jaydebeapi
+
+class MetlyQuery(object):
+
+    def __init__(self):
+        self.connect()
+        cursor = self.conn.cursor()
+
+        sql = sys.argv[1]
+        print sql
+        cursor.execute(sql)
+
+        while True:
+            results = cursor.fetchmany(20)
+
+            if not results:
+                break
+
+            for result in results:
+                print result
+
+        self.conn.close()
+
+    def connect(self, tenant_id=None):
+        uri = "jdbc:phoenix:localhost"
+
+        self.conn = jaydebeapi.connect("org.apache.phoenix.jdbc.PhoenixDriver",\
+                [uri], "/usr/local/phoenix/phoenix-4.4.0-HBase-0.98-client.jar")
+
+
+if __name__ == "__main__":
+    MetlyQuery()

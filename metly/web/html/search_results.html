@@ -1,0 +1,159 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:py="http://genshi.edgewall.org/" 
+    id="div_search_results">
+
+  <!--xi:include href="friendly_fields.html" /-->
+
+  <style>
+
+    .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th {
+        background-color: #AAAAAA;
+        color:#eeeeee;
+    }
+
+
+  </style>
+
+  <script>
+  //<![CDATA[ 
+
+    var SUMMARY_FIELDS = {
+        syslog: ["message","severity", "device_severity", "extra_1",
+            "device_hostname"]
+    };
+
+
+    var FIELD_TITLES = {
+        message: "Message",
+        severity: "Severity",
+        device_severity: "Device Severity",
+        extra_1: "Extra 1",
+        device_hostname: "Device Hostname"
+    };
+
+    var SEARCH_STATUS = {
+        0: {name: "Queued", icon: "queued.png"},
+        1: {name: "Running", icon: "queued.png"},
+        2: {name: "Done", icon: "queued.png"}
+    };
+
+    var fields;
+    var cell;
+    var rows;
+
+    function get_events() {
+        var row_html;
+
+        request = {"pager_uuid": "${pager_uuid}", "page_number": 1};
+
+        $.post("/search/get_events", request, function(data, status) {
+
+            $("#count").html(data.count);
+            $("#status").html(SEARCH_STATUS[data.status].name);
+
+            row_html = "";
+
+            $.each(data.rows, function(id, row) {
+                rows = data.rows;
+                row_html += "<tr>";
+
+                $.each(fields, function(field_id, field) {
+                    if (row[field]) {
+                        cell = row[field];
+                    } else {
+                        cell = "";
+                    }
+                    row_html += "<td class=\"event_cell\">" + cell + "</td>";
+                }); 
+
+                row_html += "</tr>";
+            });
+
+            $("#results_table_body").append(row_html);
+
+            // detect the page going away
+            if (data.status != 2 && $("#results").length) {
+                setTimeout("get_events()", 2000);
+            }
+
+
+        }, "json");
+
+
+    }
+
+    $(document).ready(function() {
+        var column;
+
+        request = {"pager_uuid": "${pager_uuid}", "page_number": 1};
+        $.post("/search/set_page_info", request, function(data, status) {
+            fields = data
+            $.each(data, function(id, field) {
+                // add the field to the table
+                $("#results_table_header").append("<th>" + FIELD_TITLES[field] + "</th>");
+            }); 
+        }, "json");
+
+        setTimeout("get_events()", 100);
+
+        /* Fires when a user clicks on an event row */
+        $(document).on("click", ".event_cell", function(event) {
+            index = $(this).parent().index();
+            row = rows[index];
+
+            $("#inspector").remove();
+
+            field_names = {};
+
+            /* combine the field names from all the types */
+            $.each(row["types"], function(type_index, type) {
+                $.each(SUMMARY_FIELDS[type], function(sf_index, field_name) {
+                    field_names[field_name] = true;
+                });
+            });
+
+            row_html = "<tr id=\"inspector\"><td colspan=\"" + fields.length + "\"><table>";
+            /* now construct the inspector table */
+            $.each(field_names, function(field_name, zz) {
+                row_html += "<tr><th>";
+                row_html += FIELD_TITLES[field_name];
+                row_html += "</th><td>";
+                row_html += row[field_name];
+                row_html += "</td></tr>";
+            });
+            row_html += "</td></tr></table>"
+
+            $(this).parent().after(row_html);
+
+/*            $("#inspector_table_body").empty();
+            $("#inspector_table_body").append(row_html);
+            */
+        });
+
+    });
+
+  // ]]>
+  </script>
+
+  <h3>Search Results</h3>
+  <pre class="alert alert-info">
+${search.title}
+Status: <span id="status">Waiting</span>
+<span id="count">0</span> records found.</pre>
+  <div>
+  </div>
+
+  <div id="results">
+    <table id="results_table" class="table table-striped table-bordered
+        table-hover">
+      <thead>
+        <tr id="results_table_header">
+        </tr>
+      </thead>
+      <tbody id="results_table_body">
+      </tbody>
+    </table>
+  </div>
+
+</div>

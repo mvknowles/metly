@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -fr ~/.metly/etc/metly/client.crt ~/.metly/etc/metly/client.key  ~/.metly/etc/metly/ca.crt
+~/Documents/SCM/metly/metly/client/metlyclient -c ~/.metly/etc/metly/client.conf
