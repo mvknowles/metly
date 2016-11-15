@@ -21,6 +21,19 @@ The following technologies are in use:
 * CherryPy
 * SQLAlchemy
 
+Architecture
+------------
+To give you an idea of the scale we're talking about and the role of various
+components, I've put together this architecture diagram.  It shows how each
+component is placed and the way in which scalability is achieved.  Obviously
+we don't show availability zones here, but you have the ability to abstract
+all these components across regions.
+
+![network_architecture](https://cloud.githubusercontent.com/assets/23462962/20287699/f4185c30-ab32-11e6-8917-bb3292dd119f.png)
+
+Just show me a picture of it working!
+-------------------------------------
+
 Here's a screenshot that shows the basic end results:
 
 ![search results](https://cloud.githubusercontent.com/assets/23462962/20283480/1bbec27a-ab1e-11e6-859f-b12610f0d922.png)
